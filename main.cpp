@@ -1,27 +1,33 @@
 #include <QApplication>
 #include <QGuiApplication>
-#include <QQmlApplicationEngine>
+#include "componentcreatorengine.h"
+#include <QQmlContext>
 #include <QDebug>
 
 
 int main(int argc, char *argv[])
 {
+    // установка переменной окружения
+    qputenv("MAIN_QML","qrc:/Main.qml");
+
     QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
+    ComponentCreatorEngine engine;
 
     engine.addImportPath("C:/QT_LESSONS/7_01_20025/component_library");
 
-    const QUrl url(QStringLiteral("qrc:/Main.qml"));
+    engine.rootContext()->setContextProperty("QmlEngine", &engine);
+
+    const QUrl url(qgetenv("MAIN_QML"));
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
+
     engine.load(url);
-
-
 
     return app.exec();
 }

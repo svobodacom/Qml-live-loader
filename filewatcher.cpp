@@ -10,6 +10,8 @@ FileWatcher::FileWatcher(QObject* parent) : QObject(parent)
     m_timer.setSingleShot(true);
 
     QObject::connect(&m_timer, &QTimer::timeout, this, &FileWatcher::reloadUI);
+
+    setDirectory("C:/QT_LESSONS/7_01_20025");
 }
 
 
